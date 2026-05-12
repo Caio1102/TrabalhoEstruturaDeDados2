@@ -4,16 +4,34 @@ public class Netflix {
     private String show_type;
     private String descricao;
     private int release_year;
-    private int age_certification;
+    private String age_certification;
     private int runtime;
-    private String generos;
-    private String production_countries;
-    private int temporadas;
+    private String generos; //lista de string
+    private String production_countries; // lista de string
+    private double temporadas;
     private String imdb_id;
     private double imdb_score;
     private double imdb_votes;
-    private int tmdb_popularity;
-    private int tmdb_score;
+    private double tmdb_popularity;
+    private double tmdb_score;
+
+    public SeuObjeto(String id, String titulo, String show_type, String descricao, int release_year, String age_certification, int runtime, String generos, String production_countries, int temporadas, String imdb_id, double imdb_score, double imdb_votes, int tmdb_popularity, int tmdb_score) {
+        this.id = id;
+        this.titulo = titulo;
+        this.show_type = show_type;
+        this.descricao = descricao;
+        this.release_year = release_year;
+        this.age_certification = age_certification;
+        this.runtime = runtime;
+        this.generos = generos;
+        this.production_countries = production_countries;
+        this.temporadas = temporadas;
+        this.imdb_id = imdb_id;
+        this.imdb_score = imdb_score;
+        this.imdb_votes = imdb_votes;
+        this.tmdb_popularity = tmdb_popularity;
+        this.tmdb_score = tmdb_score;
+    }
 
     public String getId() {
         return id;
