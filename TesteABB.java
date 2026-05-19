@@ -1,5 +1,3 @@
-package TesteABB;
-
 public class TesteABB {
 
 	public static void main(String[] args) {

@@ -1,5 +1,3 @@
-package TesteABB;
-
 //Classe Aluno: encarregada de manipular um objeto do tipo Aluno
 //contendo os atributos: RA, nome, sexo, media.
 //

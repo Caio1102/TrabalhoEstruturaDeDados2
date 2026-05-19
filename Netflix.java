@@ -1,4 +1,4 @@
-public class Netflix {
+public class Netflix implements Comparable<Netflix> {
     private String id;
     private String titulo;
     private String show_type;
@@ -73,11 +73,11 @@ public class Netflix {
         this.release_year = release_year;
     }
 
-    public int getAge_certification() {
+    public String getAge_certification() {
         return age_certification;
     }
 
-    public void setAge_certification(int age_certification) {
+    public void setAge_certification(String age_certification) {
         this.age_certification = age_certification;
     }
 
@@ -105,11 +105,11 @@ public class Netflix {
         this.production_countries = production_countries;
     }
 
-    public int getTemporadas() {
+    public double getTemporadas() {
         return temporadas;
     }
 
-    public void setTemporadas(int temporadas) {
+    public void setTemporadas(double temporadas) {
         this.temporadas = temporadas;
     }
 
@@ -137,19 +137,24 @@ public class Netflix {
         this.imdb_votes = imdb_votes;
     }
 
-    public int getTmdb_popularity() {
+    public double getTmdb_popularity() {
         return tmdb_popularity;
     }
 
-    public void setTmdb_popularity(int tmdb_popularity) {
+    public void setTmdb_popularity(double tmdb_popularity) {
         this.tmdb_popularity = tmdb_popularity;
     }
 
-    public int getTmdb_score() {
+    public double getTmdb_score() {
         return tmdb_score;
     }
 
-    public void setTmdb_score(int tmdb_score) {
+    public void setTmdb_score(double tmdb_score) {
         this.tmdb_score = tmdb_score;
+    }
+
+    @Override
+    public int compareTo(Netflix outro) {
+        return this.id.compareTo(outro.id);
     }
 }

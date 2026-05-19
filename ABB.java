@@ -1,5 +1,3 @@
-package TesteABB;
-
 //Classe ABB<T>: encarregada de manipular a estrutura de dados
 //árvore de busca binária (ABB) genérica.
 //
@@ -344,4 +342,20 @@ public class ABB<T extends Comparable<T>> {
             return null;
         }
     }  
+
+    public int altura() {
+        return altura(raiz);
+    }
+
+    private int altura(Node<T> no) {
+        // árvore vazia
+        if (no == null) {
+            return -1;
+        }
+
+        int alturaEsquerda = altura(no.getFilhoEsquerdo());
+        int alturaDireita = altura(no.getFilhoDireito());
+
+        return 1 + Math.max(alturaEsquerda, alturaDireita);
+    }
 }

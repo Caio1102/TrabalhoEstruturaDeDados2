@@ -1,5 +1,3 @@
-package TesteABB;
-
 //Classe NodeLL: relativa a um nó (NodeLL) da estrutura de dados  
 //Lista Ligada capaz de armazenar dados genéricos
 //De qualquer tipo de dado não primitivo.
