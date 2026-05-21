@@ -8,14 +8,19 @@ public class Main {
 
 
         Scanner sc = new Scanner(System.in);
+
+        System.out.println("Escolha uma opcao:");
         int opcao = sc.nextInt(); 
         sc.nextLine(); // limpar o buffer, sem BO
 
         switch (opcao) {
             case 1:
-                carregarArquivo(ABB<Netflix> arvore);
+                leitor.carregarArquivo(arvore);
+                break;
+            default:
+                System.out.println("Sem nada mapeado ainda ");
                 break;
         }
     sc.close();
     }
-}
+} 

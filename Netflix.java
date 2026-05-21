@@ -15,7 +15,7 @@ public class Netflix implements Comparable<Netflix> {
     private double tmdb_popularity;
     private double tmdb_score;
 
-    public Netflix(String id, String titulo, String show_type, String descricao, int release_year, String age_certification, int runtime, String generos, String production_countries, int temporadas, String imdb_id, double imdb_score, double imdb_votes, int tmdb_popularity, int tmdb_score) {
+    public Netflix(String id, String titulo, String show_type, String descricao, int release_year, String age_certification, int runtime, String generos, String production_countries, double temporadas, String imdb_id, double imdb_score, double imdb_votes, double tmdb_popularity, double tmdb_score) {
         this.id = id;
         this.titulo = titulo;
         this.show_type = show_type;
