@@ -1,19 +1,29 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner; 
 
-public class Leitor { // Ou o nome da classe onde você vai colocar a leitura
-    public void carregarArquivo(String nomeArquivo, ABB<Netflix> arvore) {
+public class Leitor { 
+    
+    
+    public void carregarArquivo(ABB<Netflix> arvore) {
         
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Digite o nome do arquivo que deseja ser lido:");
+        String nomeArquivo = sc.nextLine();
+
+
         // try-with-resources (fecha o arquivo automaticamente)
         try (BufferedReader br = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
             br.readLine(); // pula o cabeçalho
-            int inseridos = 0, descartados = 0;
+            int inseridos = 0;
+            int descartados = 0;
 
             while ((linha = br.readLine()) != null) {
                 // Regex para dividir CSV considerando aspas (idêntico à sua foto)
-                String[] campos = linha.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                String[] campos = linha.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // regra matematica que tira nao zuar as virgulas 
 
                 // Se validarCampos retornar true, os dados são inseridos
                 if (validarCampos(campos)) { 
@@ -23,9 +33,9 @@ public class Leitor { // Ou o nome da classe onde você vai colocar a leitura
                             campos[1].trim(),  // título (String)
                             campos[2].trim(),  // show_type (String)
                             campos[3].trim(),  // descrição (String)
-                            Integer.parseInt(campos[4].trim()), // release_year (int)
+                            parseIntSafe(campos[4].trim()), // release_year (int)
                             campos[5].trim(),  // age_certification (String)
-                            Integer.parseInt(campos[6].trim()), // runtime (int)
+                            parseIntSafe(campos[6].trim()), // runtime (int)
                             campos[7].trim(),  // gêneros (String)
                             campos[8].trim(),  // production_countries (String)
                             parseDoubleSafe(campos[9].trim()),     // temporadas (double) - uso do safe pois filmes não tem temporada
@@ -36,7 +46,7 @@ public class Leitor { // Ou o nome da classe onde você vai colocar a leitura
                             parseDoubleSafe(campos[14].trim())  // tmdb_score (double)
                         );
 
-                        arvore.inserir(p); // Chave de inserção é o ID
+                        arvore.inserir(p); // Chave de inserção é o ID // Kenzo entendeu ? 
                         inseridos++;
                         
                     } catch (NumberFormatException e) {
@@ -53,45 +63,34 @@ public class Leitor { // Ou o nome da classe onde você vai colocar a leitura
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
         }
+        sc.close();
     }
 
-    // --- MÉTODOS AUXILIARES (Que aparecem no fim da sua tela) ---
 
-    // método de validação da inserção
+
+    // metodo para validar se pode ser inserido na arvore
     private boolean validarCampos(String[] campos) {
-        // O dataset original tem 15 colunas. Se quebrar errado, descarta.
-        if (campos.length != 15) {
-            return false;
-        }
-        
-        // Verifica se há algum campo totalmente vazio
-        // for (String campo : campos) {
-        //     if (campo == null || campo.trim().isEmpty()) {
-        //         return false;
-        //     }
-        // }
 
-        // ID
-        if (campos[0].trim().isEmpty()) {
+        if (campos.length != 15) { // kenzo: mesmo em filmes, a coluna fica vazia(!= null) e completa 15 :)
             return false;
         }
 
-        // TITLE
-        if (campos[1].trim().isEmpty()) {
-            return false;
-        }
+        String tipo = campos[2].trim();
 
-        // SHOW_TYPE
-        if (campos[2].trim().isEmpty()) {
-            return false;
-        }
+        for (int i = 0; i <campos.length; i++){
+            if (i == 9 && tipo.equalsIgnoreCase("MOVIE")) { // se for filme ele pode ter a coluna seasons vazia
+                continue;
+            }
 
-        // RELEASE_YEAR
-        if (campos[4].trim().isEmpty()) {
-            return false;
+            if (campos[i] == null || campos[i].trim().isEmpty()){ // se alguma outra coluna estiver fazia, sera descartada
+                return false;
+            }
         }
-        return true;
+        return true; 
     }
+
+
+    //Validacao se o numeros estiverem vazios 
 
     // Métodos "Safe" que você usou na foto para evitar que o programa quebre 
     // se tentar ler um número vazio no CSV.

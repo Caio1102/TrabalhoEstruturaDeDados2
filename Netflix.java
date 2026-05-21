@@ -8,7 +8,7 @@ public class Netflix implements Comparable<Netflix> {
     private int runtime;
     private String generos; //lista de string
     private String production_countries; // lista de string
-    private double temporadas;
+    private double temporadas; // filmes nao tem temporadas ( fazer validacoa com Shows ?)
     private String imdb_id;
     private double imdb_score;
     private double imdb_votes;
@@ -153,7 +153,7 @@ public class Netflix implements Comparable<Netflix> {
         this.tmdb_score = tmdb_score;
     }
 
-    @Override
+    @Override // interface que ira compara os nos
     public int compareTo(Netflix outro) {
         return this.id.compareTo(outro.id);
     }
