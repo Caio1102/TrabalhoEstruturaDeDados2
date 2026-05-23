@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Leitor { 
     
     
-    public void carregarArquivo(ABB<Netflix> arvore) {
+    public void carregarArquivo(ABB<Netflix> arvore) { // !!!!!!!!!! Colocar o scanner no menu, a classe só receber as variaveis (Responsabilidade Unica)
         
         Scanner sc = new Scanner(System.in);
 
@@ -59,6 +59,7 @@ public class Leitor {
             }
             
             System.out.println("Insercao concluida! Inseridos: " + inseridos + " | Descartados: " + descartados);
+            System.out.println(arvore); 
 
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
