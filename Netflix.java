@@ -1,3 +1,13 @@
+/*
+ * Estrutura de Dados 
+ * 
+ * Integrantes:
+ * Ana Lessa Ferreira - 10732666
+ * Caio Vinicius Mussi Trindade - 10735885
+ * Julia Oliveira Longhi - 10736801
+ * Vitor Kenzo M. Ochida - 10737201
+ */
+
 public class Netflix implements Comparable<Netflix> {
     private String id;
     private String titulo;
@@ -6,16 +16,23 @@ public class Netflix implements Comparable<Netflix> {
     private int release_year;
     private String age_certification;
     private int runtime;
-    private String generos; //lista de string
-    private String production_countries; // lista de string
-    private double temporadas; // filmes nao tem temporadas ( fazer validacoa com Shows ?)
+    private String generos;
+    private String production_countries;
+    private double temporadas;
     private String imdb_id;
     private double imdb_score;
     private double imdb_votes;
     private double tmdb_popularity;
     private double tmdb_score;
 
-    public Netflix(String id, String titulo, String show_type, String descricao, int release_year, String age_certification, int runtime, String generos, String production_countries, double temporadas, String imdb_id, double imdb_score, double imdb_votes, double tmdb_popularity, double tmdb_score) {
+    public Netflix(String id) {
+        this(id, "", "", "", 0, "", 0, "", "", 0, "", 0, 0, 0, 0);
+    }
+
+    public Netflix(String id, String titulo, String show_type, String descricao, int release_year,
+            String age_certification, int runtime, String generos, String production_countries,
+            double temporadas, String imdb_id, double imdb_score, double imdb_votes,
+            double tmdb_popularity, double tmdb_score) {
         this.id = id;
         this.titulo = titulo;
         this.show_type = show_type;
@@ -153,8 +170,64 @@ public class Netflix implements Comparable<Netflix> {
         this.tmdb_score = tmdb_score;
     }
 
-    @Override // interface que ira compara os nos
+    @Override
     public int compareTo(Netflix outro) {
-        return this.id.compareTo(outro.id);
+        return this.id.trim().compareTo(outro.id.trim());
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id +
+               "\nTitulo: " + titulo +
+               "\nTipo: " + show_type +
+               "\nDescricao: " + descricao +
+               "\nAno de lancamento: " + release_year +
+               "\nClassificacao etaria: " + age_certification +
+               "\nDuracao: " + runtime +
+               "\nGeneros: " + generos +
+               "\nPaises de producao: " + production_countries +
+               "\nTemporadas: " + temporadas +
+               "\nIMDb ID: " + imdb_id +
+               "\nIMDb Score: " + imdb_score +
+               "\nIMDb Votes: " + imdb_votes +
+               "\nTMDB Popularity: " + tmdb_popularity +
+               "\nTMDB Score: " + tmdb_score;
+    }
+
+    public String linhaResumo() {
+        return id + " | " + titulo + " | " + show_type + " | " + release_year +
+               " | IMDb: " + imdb_score + " | TMDB: " + tmdb_score;
+    }
+
+    public String toCSV() {
+        return csv(id) + "," +
+               csv(titulo) + "," +
+               csv(show_type) + "," +
+               csv(descricao) + "," +
+               release_year + "," +
+               csv(age_certification) + "," +
+               runtime + "," +
+               csv(generos) + "," +
+               csv(production_countries) + "," +
+               temporadas + "," +
+               csv(imdb_id) + "," +
+               imdb_score + "," +
+               imdb_votes + "," +
+               tmdb_popularity + "," +
+               tmdb_score;
+    }
+
+    private String csv(String valor) {
+        if (valor == null) {
+            return "";
+        }
+
+        String texto = valor.replace("\"", "\"\"");
+
+        if (texto.contains(",") || texto.contains("\"") || texto.contains("\n")) {
+            return "\"" + texto + "\"";
+        }
+
+        return texto;
     }
 }

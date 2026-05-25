@@ -1,110 +1,163 @@
+/*
+ * Estrutura de Dados 
+ * 
+ * Integrantes:
+ * Ana Lessa Ferreira - 10732666
+ * Caio Vinicius Mussi Trindade - 10735885
+ * Julia Oliveira Longhi - 10736801
+ * Vitor Kenzo M. Ochida - 10737201
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner; 
+import java.util.Scanner;
 
-public class Leitor { 
-    
-    
-    public void carregarArquivo(ABB<Netflix> arvore) { // !!!!!!!!!! Colocar o scanner no menu, a classe só receber as variaveis (Responsabilidade Unica)
-        
-        Scanner sc = new Scanner(System.in);
+public class Leitor {
 
+    public void carregarArquivo(ABB<Netflix> arvore, Scanner sc) {
         System.out.println("Digite o nome do arquivo que deseja ser lido:");
-        String nomeArquivo = sc.nextLine();
+        String nomeArquivo = sc.nextLine().trim();
 
+        if (nomeArquivo.isEmpty()) {
+            nomeArquivo = "titles.csv";
+        }
 
-        // try-with-resources (fecha o arquivo automaticamente)
         try (BufferedReader br = new BufferedReader(new FileReader(nomeArquivo))) {
-            String linha;
-            br.readLine(); // pula o cabeçalho
+            br.readLine(); // pula o cabecalho
+
             int inseridos = 0;
             int descartados = 0;
+            String linha;
 
-            while ((linha = br.readLine()) != null) {
-                // Regex para dividir CSV considerando aspas (idêntico à sua foto)
-                String[] campos = linha.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // regra matematica que tira nao zuar as virgulas 
+            while ((linha = lerRegistroCsv(br)) != null) {
+                String[] campos = linha.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 
-                // Se validarCampos retornar true, os dados são inseridos
-                if (validarCampos(campos)) { 
+                if (validarCampos(campos)) {
                     try {
-                        Netflix p = new Netflix(
-                            campos[0].trim(),  // id (String)
-                            campos[1].trim(),  // título (String)
-                            campos[2].trim(),  // show_type (String)
-                            campos[3].trim(),  // descrição (String)
-                            parseIntSafe(campos[4].trim()), // release_year (int)
-                            campos[5].trim(),  // age_certification (String)
-                            parseIntSafe(campos[6].trim()), // runtime (int)
-                            campos[7].trim(),  // gêneros (String)
-                            campos[8].trim(),  // production_countries (String)
-                            parseDoubleSafe(campos[9].trim()),     // temporadas (double) - uso do safe pois filmes não tem temporada
-                            campos[10].trim(), // imdb_id (String)
-                            parseDoubleSafe(campos[11].trim()), // imdb_score (double)
-                            parseDoubleSafe(campos[12].trim()), // imdb_votes (double)
-                            parseDoubleSafe(campos[13].trim()), // tmdb_popularity (double)
-                            parseDoubleSafe(campos[14].trim())  // tmdb_score (double)
-                        );
+                        Netflix programa = new Netflix(
+                                limparTexto(campos[0]),
+                                limparTexto(campos[1]),
+                                limparTexto(campos[2]),
+                                limparTexto(campos[3]),
+                                parseIntSafe(campos[4]),
+                                limparTexto(campos[5]),
+                                parseIntSafe(campos[6]),
+                                limparTexto(campos[7]),
+                                limparTexto(campos[8]),
+                                parseDoubleSafe(campos[9]),
+                                limparTexto(campos[10]),
+                                parseDoubleSafe(campos[11]),
+                                parseDoubleSafe(campos[12]),
+                                parseDoubleSafe(campos[13]),
+                                parseDoubleSafe(campos[14]));
 
-                        arvore.inserir(p); // Chave de inserção é o ID // Kenzo entendeu ? 
+                        arvore.inserir(programa);
                         inseridos++;
-                        
                     } catch (NumberFormatException e) {
-                        // Se o Java tentar converter uma letra para número e falhar, ele descarta a linha
                         descartados++;
                     }
                 } else {
                     descartados++;
                 }
             }
-            
-            System.out.println("Insercao concluida! Inseridos: " + inseridos + " | Descartados: " + descartados);
-            System.out.println(arvore); 
 
+            System.out.println("Leitura concluida.");
+            System.out.println("Inseridos na ABB: " + inseridos);
+            System.out.println("Descartados: " + descartados);
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
         }
     }
 
+    // Algumas descricoes do CSV podem quebrar linha dentro de aspas.
+    // Entao aqui a gente junta ate o registro ficar com as aspas fechadas.
+    private String lerRegistroCsv(BufferedReader br) throws IOException {
+        String linha = br.readLine();
 
+        if (linha == null) {
+            return null;
+        }
 
-    // metodo para validar se pode ser inserido na arvore
+        while (!aspasFechadas(linha)) {
+            String proximaLinha = br.readLine();
+
+            if (proximaLinha == null) {
+                break;
+            }
+
+            linha = linha + "\n" + proximaLinha;
+        }
+
+        return linha;
+    }
+
+    private boolean aspasFechadas(String texto) {
+        int qtdAspas = 0;
+
+        for (int i = 0; i < texto.length(); i++) {
+            if (texto.charAt(i) == '"') {
+                qtdAspas++;
+            }
+        }
+
+        return qtdAspas % 2 == 0;
+    }
+
     private boolean validarCampos(String[] campos) {
-
-        if (campos.length != 15) { // kenzo: mesmo em filmes, a coluna fica vazia(!= null) e completa 15 :)
+        if (campos.length != 15) {
             return false;
         }
 
-        String tipo = campos[2].trim();
+        String tipo = limparTexto(campos[2]);
 
-        for (int i = 0; i <campos.length; i++){
-            if (i == 9 && tipo.equalsIgnoreCase("MOVIE")) { // se for filme ele pode ter a coluna seasons vazia
+        for (int i = 0; i < campos.length; i++) {
+            // Para filmes, seasons vem vazio no dataset. No codigo, guardamos como 0.
+            if (i == 9 && tipo.equalsIgnoreCase("MOVIE")) {
                 continue;
             }
 
-            if (campos[i] == null || campos[i].trim().isEmpty()){ // se alguma outra coluna estiver fazia, sera descartada
+            if (campos[i] == null || campos[i].trim().isEmpty()) {
                 return false;
             }
         }
-        return true; 
+
+        return true;
     }
 
+    private String limparTexto(String valor) {
+        if (valor == null) {
+            return "";
+        }
 
-    //Validacao se o numeros estiverem vazios 
+        valor = valor.trim();
 
-    // Métodos "Safe" que você usou na foto para evitar que o programa quebre 
-    // se tentar ler um número vazio no CSV.
+        if (valor.length() >= 2 && valor.startsWith("\"") && valor.endsWith("\"")) {
+            valor = valor.substring(1, valor.length() - 1);
+        }
+
+        valor = valor.replace("\"\"", "\"");
+
+        return valor;
+    }
+
     private double parseDoubleSafe(String valor) {
-        if (valor == null || valor.trim().isEmpty()) {
+        valor = limparTexto(valor);
+
+        if (valor.isEmpty()) {
             return 0.0;
         }
-        return Double.parseDouble(valor.trim());
+
+        return Double.parseDouble(valor);
     }
 
     private int parseIntSafe(String valor) {
-        if (valor == null || valor.trim().isEmpty()) {
+        valor = limparTexto(valor);
+
+        if (valor.isEmpty()) {
             return 0;
         }
-        return Integer.parseInt(valor.trim());
+
+        return Integer.parseInt(valor);
     }
 }

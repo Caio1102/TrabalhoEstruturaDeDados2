@@ -1,3 +1,13 @@
+/*
+ * Estrutura de Dados 
+ * 
+ * Integrantes:
+ * Ana Lessa Ferreira - 10732666
+ * Caio Vinicius Mussi Trindade - 10735885
+ * Julia Oliveira Longhi - 10736801
+ * Vitor Kenzo M. Ochida - 10737201
+ */
+
 //Classe NodeLL: relativa a um nó (NodeLL) da estrutura de dados  
 //Lista Ligada capaz de armazenar dados genéricos
 //De qualquer tipo de dado não primitivo.

@@ -1,3 +1,13 @@
+/*
+ * Estrutura de Dados 
+ * 
+ * Integrantes:
+ * Ana Lessa Ferreira - 10732666
+ * Caio Vinicius Mussi Trindade - 10735885
+ * Julia Oliveira Longhi - 10736801
+ * Vitor Kenzo M. Ochida - 10737201
+ */
+
 //Classe Node: relativa a um nó (Node) da estrutura de dados  
 //Árvore de Busca Binária (ABB) capaz de armazenar dados genéricos
 //De qualquer tipo de dado não primitivo.

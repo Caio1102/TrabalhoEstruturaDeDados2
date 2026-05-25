@@ -1,3 +1,13 @@
+/*
+ * Estrutura de Dados 
+ * 
+ * Integrantes:
+ * Ana Lessa Ferreira - 10732666
+ * Caio Vinicius Mussi Trindade - 10735885
+ * Julia Oliveira Longhi - 10736801
+ * Vitor Kenzo M. Ochida - 10737201
+ */
+
 //Classe LinkedList<T>: encarregada de manipular a estrutura de dados
 //lista ligada genérica.
 //
